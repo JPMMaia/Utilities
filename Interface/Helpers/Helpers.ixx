@@ -20,46 +20,6 @@ namespace Maia
 				return std::string(wstr.begin(), wstr.end());
 			}
 
-			export inline bool FileExists(const std::wstring& filename)
-			{
-				std::fstream fileStream(WStringToString(filename));
-				return fileStream.good();
-			}
-			export inline std::wstring GetFilename(const std::wstring& filename)
-			{
-				std::wstring searchString(L"/");
-
-				auto begin = std::find_end(filename.begin(), filename.end(), searchString.begin(), searchString.end());
-				if (begin == filename.end())
-					begin = filename.begin();
-				else
-					++begin;
-
-				std::wstring dot(L".");
-				auto end = std::find_end(begin, filename.end(), dot.begin(), dot.end());
-
-				return std::wstring(begin, end);
-			}
-			export inline std::wstring GetFileExtension(const std::wstring& filename)
-			{
-				std::wstring dot(L".");
-				auto end = std::find_end(filename.begin(), filename.end(), dot.begin(), dot.end());
-				if (end == filename.end())
-					throw std::invalid_argument("Filename has no extension.");
-
-				return std::wstring(end + 1, filename.end());
-			}
-			export inline std::wstring GetFilePath(const std::wstring& filename)
-			{
-				std::wstring searchString(L"/");
-
-				auto location = std::find_end(filename.begin(), filename.end(), searchString.begin(), searchString.end());
-				if (location == filename.end())
-					return L"";
-
-				return std::wstring(filename.begin(), location + 1);
-			}
-
 			export template<typename ContainerType>
 			void ReadData(const std::wstring& filename, ContainerType& buffer)
 			{

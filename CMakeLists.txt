@@ -70,3 +70,6 @@ install(EXPORT MaiaUtilitiesConfig DESTINATION CMake)
 
 # Make the project importable from the build directory:
 export(TARGETS MaiaUtilities FILE MaiaUtilitiesConfig.cmake)
+
+# Add tests:
+add_subdirectory(Test)
