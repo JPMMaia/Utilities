@@ -5,6 +5,9 @@ add_executable(MaiaUtilitiesUnitTest Source/main.cpp)
 add_executable(Maia::Utilities::UnitTest ALIAS MaiaUtilitiesUnitTest)
 gtest_discover_tests(MaiaUtilitiesUnitTest)
 
+# Set compile features:
+target_compile_features(MaiaUtilitiesUnitTest PRIVATE cxx_std_17)
+
 # Add includes directories:
 target_include_directories(MaiaUtilitiesUnitTest PRIVATE ${GOOGLE_TEST_INCLUDE_DIRECTORY})
 
