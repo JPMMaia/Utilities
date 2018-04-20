@@ -1,38 +1,35 @@
 export module Maia.Utilities.Memory;
 
-import std.core;
-
 namespace Maia
 {
 	namespace Utilities
 	{
 		export class MemoryPoolConstIterator
 		{
-		}
+		};
 
-		export class MemoryPoolIterator
+		export class MemoryPoolIterator : public MemoryPoolConstIterator
 		{
-		}
+		};
 
-		template <class ValueT>
-		export class MemoryPool
+		export template <class ValueT>
+		class MemoryPool
 		{
 		public:
 			
 			// Public member types:
+			using SizeType = std::size_t;
 			using ValueType = ValueT;
 			using Reference = ValueT&;
+			using ConstReference = const Reference;
 			using Iterator = MemoryPoolIterator;
 			using ConstIterator = MemoryPoolConstIterator;
 
 			// Constructors:
 			MemoryPool() = default;
-			MemoryPool(std::size_t capacity)
+			MemoryPool(SizeType count, const ValueType& value = ValueType())
 			{
 			}
-
-			// Element access:
-
 
 			// Iterators:
 			Iterator Begin() noexcept
@@ -65,16 +62,15 @@ namespace Maia
 			{
 				return false;
 			}
-			std::size_t Size() const noexcept
+			SizeType Size() const noexcept
 			{
 				return 0;
 			}
-			std::size_t MaxSize() const noexcept
+			SizeType MaxSize() const noexcept
 			{
 				return 0;
 			}
-
-			void Reserve(std::size_t capacity)
+			void Reserve(SizeType capacity)
 			{
 			}
 
@@ -85,6 +81,8 @@ namespace Maia
 			template <class ...ArgumentsT>
 			Reference Emplace(ArgumentsT&&... arguments)
 			{
+				static ValueType v;
+				return &v;
 			}
 			void Erase(ConstIterator position)
 			{
@@ -98,10 +96,10 @@ namespace Maia
 			void Push(ValueType&& value)
 			{
 			}
-			void Resize(std::size_t count)
+			void Resize(SizeType count)
 			{
 			}
-			void Resize(std::size_t count, const ValueType& value)
+			void Resize(SizeType count, const ValueType& value)
 			{
 			}
 			void Swap(MemoryPool<ValueType>& other) noexcept

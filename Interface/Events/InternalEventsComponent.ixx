@@ -1,8 +1,8 @@
-export module Maia.Utilities.Events.InternalEventComponent;
-
 import std.core;
 import std.threading;
 import Maia.Utilities.Events.InternalEvent;
+
+export module Maia.Utilities.Events.InternalEventComponent;
 
 namespace Maia
 {

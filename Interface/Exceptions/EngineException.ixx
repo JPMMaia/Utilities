@@ -1,6 +1,6 @@
-﻿export module Maia.Utilities.Exceptions;
+﻿import std.core;
 
-import std.core;
+export module Maia.Utilities.Exceptions;
 
 namespace Maia
 {

@@ -1,6 +1,6 @@
-export module Maia.Utilities.Threading.Task;
-
 import std.threading;
+
+export module Maia.Utilities.Threading.Task;
 
 namespace Maia
 {

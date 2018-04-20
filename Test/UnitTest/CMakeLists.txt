@@ -17,6 +17,9 @@ target_sources(MaiaUtilitiesUnitTest PRIVATE
 	# Math:
 	Source/Math/MathHelpersTest.cpp
 
+	# Memory:
+	Source/Memory/MemoryPoolTest.cpp
+
 )
 
 # Link Google Test and Google Mock libraries:

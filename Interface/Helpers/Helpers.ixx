@@ -1,9 +1,9 @@
 #include <string.h>
 
-export module Maia.Utilities.Helpers;
-
 import std.core;
 import std.threading;
+
+export module Maia.Utilities.Helpers;
 
 namespace Maia
 {

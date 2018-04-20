@@ -1,7 +1,7 @@
-export module Maia.Utilities.Timers;
-
 import std.core;
 import std.threading;
+
+export module Maia.Utilities.Timers;
 
 namespace Maia
 {
