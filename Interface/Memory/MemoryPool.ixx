@@ -1,9 +1,16 @@
+#include <numeric>
+#include <stdexcept>
+#include <vector>
+
 export module Maia.Utilities.Memory;
 
 namespace Maia
 {
 	namespace Utilities
 	{
+		template <class ValueT>
+		class MemoryPool;
+
 		export template <class ValueT>
 		class MemoryPoolConstIterator
 		{
@@ -13,19 +20,47 @@ namespace Maia
 			using ValueType = ValueT;
 			using Reference = ValueT&;
 			using ConstReference = const ValueT&;
+			using Pointer = ValueType*;
+
+			// Constructors:
+			MemoryPoolConstIterator(Pointer element) :
+				m_element(element)
+			{	
+			}
 
 			// Element access:
-			ConstReference operator*()
+			ConstReference operator*() const
 			{
-				static ValueType value;
-				return &value;
+				return *m_element;
 			}
+
+		protected:
+
+			// Friends:
+			friend MemoryPool<ValueType>;
+
+			// Members:
+			Pointer m_element;
 
 		};
 
 		export template <class ValueT>
 		class MemoryPoolIterator : public MemoryPoolConstIterator<ValueT>
 		{
+		public:
+
+			// Constructors:
+			MemoryPoolIterator(Pointer element) :
+				MemoryPoolConstIterator(element)
+			{	
+			}
+
+			// Element access:
+			Reference operator*() const
+			{
+				return *m_element;
+			}
+
 		};
 
 		export template <class ValueT>
@@ -47,8 +82,12 @@ namespace Maia
 			MemoryPool(MemoryPool&& other) noexcept
 			{
 			}
-			MemoryPool(SizeType count, const ValueType& value = ValueType())
+			MemoryPool(SizeType capacity) :
+				m_elements(),
+				m_inactiveElements(),
+				m_numActiveElements(0)
 			{
+				Reserve(capacity);
 			}
 
 			// Copy/move assignment:
@@ -58,76 +97,86 @@ namespace Maia
 			}
 
 			// Iterators:
-			Iterator Begin() noexcept
+			Iterator Begin()
 			{
-				return {};
+				return Iterator(m_elements.data());
 			}
-			ConstIterator Begin() const noexcept
+			Iterator End()
 			{
-				return {};
-			}
-			ConstIterator CBegin() const noexcept
-			{
-				return {};
-			}
-			Iterator End() noexcept
-			{
-				return {};
-			}
-			ConstIterator End() const noexcept
-			{
-				return {};
-			}
-			ConstIterator CEnd() const noexcept
-			{
-				return {};
+				return Iterator(m_elements.data() + Size());
 			}
 
 			// Capacity:
 			bool Empty() const noexcept
 			{
-				return false;
+				return Size() == 0;
 			}
 			SizeType Size() const noexcept
 			{
-				return 0;
+				return m_numActiveElements;
 			}
 			SizeType MaxSize() const noexcept
 			{
-				return 0;
+				return m_elements.max_size();
 			}
 			void Reserve(SizeType capacity)
 			{
+				m_elements.reserve(capacity);
+				
+				m_inactiveElements.resize(capacity);
+				std::iota(m_inactiveElements.begin(), m_inactiveElements.end(), 0);
 			}
 			SizeType Capacity() const noexcept
 			{
-				return 0;
+				return m_elements.capacity();
 			}
 
 			// Modifiers:
 			void Clear() noexcept
 			{
+				m_elements.clear();
+				m_inactiveElements.clear();
+				m_numActiveElements = 0;
 			}
 			template <class ...ArgumentsT>
 			Iterator Emplace(ArgumentsT&&... arguments)
 			{
-				return {};
+				if (m_inactiveElements.empty())
+				{
+					throw std::out_of_range("Memory pool is full! Use the reserve method to reserve a block of memory!");
+				}
+
+				auto index = m_inactiveElements.back();
+				m_inactiveElements.pop_back();
+				++m_numActiveElements;
+
+				m_elements[index] = ValueType(std::forward<ArgumentsT>(arguments)...);
+
+				return Iterator(m_elements.data() + index);
 			}
 			void Erase(ConstIterator position)
 			{
-			}
-			void Erase(ConstIterator first, ConstIterator last)
-			{
-			}
-			void Resize(SizeType count)
-			{
-			}
-			void Resize(SizeType count, const ValueType& value)
-			{
+				--m_numActiveElements;
+				m_inactiveElements.emplace_back(position.m_element - m_elements.data());
+
 			}
 			void Swap(MemoryPool<ValueType>& other) noexcept
 			{
+				std::swap(m_elements, other.m_elements);
+				std::swap(m_inactiveElements, other.m_inactiveElements);
+				std::swap(m_numActiveElements, other.m_numActiveElements);
 			}
+
+		private:
+
+			// Friends:
+			friend class ConstIterator;
+			friend class Iterator;
+
+			// Members:
+			std::vector<ValueType> m_elements;
+			std::vector<SizeType> m_inactiveElements;
+			std::size_t m_numActiveElements = 0;
 
 		};
 	}
