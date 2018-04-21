@@ -4,11 +4,27 @@ namespace Maia
 {
 	namespace Utilities
 	{
-		export class MemoryPoolConstIterator
+		export template <class ValueT>
+		class MemoryPoolConstIterator
 		{
+		public:
+
+			// Public member types:
+			using ValueType = ValueT;
+			using Reference = ValueT&;
+			using ConstReference = const ValueT&;
+
+			// Element access:
+			ConstReference operator*()
+			{
+				static ValueType value;
+				return &value;
+			}
+
 		};
 
-		export class MemoryPoolIterator : public MemoryPoolConstIterator
+		export template <class ValueT>
+		class MemoryPoolIterator : public MemoryPoolConstIterator<ValueT>
 		{
 		};
 
@@ -21,13 +37,23 @@ namespace Maia
 			using SizeType = std::size_t;
 			using ValueType = ValueT;
 			using Reference = ValueT&;
-			using ConstReference = const Reference;
-			using Iterator = MemoryPoolIterator;
-			using ConstIterator = MemoryPoolConstIterator;
+			using ConstReference = const ValueT&;
+			using Iterator = MemoryPoolIterator<ValueT>;
+			using ConstIterator = MemoryPoolConstIterator<ValueT>;
 
 			// Constructors:
-			MemoryPool() = default;
+			MemoryPool() noexcept = default;
+			MemoryPool(const MemoryPool& other) = delete;
+			MemoryPool(MemoryPool&& other) noexcept
+			{
+			}
 			MemoryPool(SizeType count, const ValueType& value = ValueType())
+			{
+			}
+
+			// Copy/move assignment:
+			MemoryPool& operator=(const MemoryPool& other) = delete;
+			MemoryPool& operator=(MemoryPool&& other) noexcept
 			{
 			}
 
@@ -73,27 +99,24 @@ namespace Maia
 			void Reserve(SizeType capacity)
 			{
 			}
+			SizeType Capacity() const noexcept
+			{
+				return 0;
+			}
 
 			// Modifiers:
 			void Clear() noexcept
 			{
 			}
 			template <class ...ArgumentsT>
-			Reference Emplace(ArgumentsT&&... arguments)
+			Iterator Emplace(ArgumentsT&&... arguments)
 			{
-				static ValueType v;
-				return &v;
+				return {};
 			}
 			void Erase(ConstIterator position)
 			{
 			}
 			void Erase(ConstIterator first, ConstIterator last)
-			{
-			}
-			void Push(const ValueType& value)
-			{
-			}
-			void Push(ValueType&& value)
 			{
 			}
 			void Resize(SizeType count)
