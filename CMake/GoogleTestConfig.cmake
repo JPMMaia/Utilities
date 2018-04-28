@@ -1,3 +1,6 @@
+# Input variables:
+set(GTEST_ROOT ENV{GTEST_ROOT} CACHE PATH "Path for Google Test")
+
 # Output message:
 message("Looking for Google Test in " ${GTEST_ROOT})
 
