@@ -2,7 +2,7 @@
 #include <stdexcept>
 #include <vector>
 
-export module Maia.Utilities.Memory;
+export module Maia.Utilities.Memory.MemoryPool;
 
 namespace Maia
 {
@@ -79,7 +79,10 @@ namespace Maia
 			// Constructors:
 			MemoryPool() noexcept = default;
 			MemoryPool(const MemoryPool& other) = delete;
-			MemoryPool(MemoryPool&& other) noexcept
+			MemoryPool(MemoryPool&& other) noexcept :
+				m_elements(std::move(other.m_elements)),
+				m_inactiveElements(std::move(other.m_inactiveElements)),
+				m_numActiveElements(other.m_numActiveElements)
 			{
 			}
 			MemoryPool(SizeType capacity) :
@@ -94,6 +97,9 @@ namespace Maia
 			MemoryPool& operator=(const MemoryPool& other) = delete;
 			MemoryPool& operator=(MemoryPool&& other) noexcept
 			{
+				m_elements = std::move(other.m_elements);
+				m_inactiveElements = std::move(other.m_inactiveElements);
+				m_numActiveElements = std::move(other.m_numActiveElements);
 			}
 
 			// Iterators:

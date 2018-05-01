@@ -18,7 +18,12 @@ target_sources(MaiaUtilitiesUnitTest PRIVATE
 	Source/Math/MathHelpersTest.cpp
 
 	# Memory:
+	Source/Memory/ContiguousMemoryPoolTest.cpp
 	Source/Memory/MemoryPoolTest.cpp
+	Source/Memory/PointedContiguousMemoryPoolTest.cpp
+
+	# Threading:
+	Source/Threading/ThreadPoolTest.cpp
 
 )
 

@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <numeric>
 
-import Maia.Utilities.Memory;
+import Maia.Utilities.Memory.MemoryPool;
 
 using namespace Maia::Utilities;
 

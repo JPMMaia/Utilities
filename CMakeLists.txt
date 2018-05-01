@@ -27,12 +27,14 @@ target_sources(MaiaUtilities PRIVATE
 	Interface/Math/MathHelpers.ixx
 
 	# Memory:
+	Interface/Memory/Memory.ixx
+	Interface/Memory/ContiguousMemoryPool.ixx
 	Interface/Memory/MemoryPool.ixx
-
+	Interface/Memory/PointedContiguousMemoryPool.ixx
+	
 	# Threading:
 	Interface/Threading/Threading.ixx
-	Interface/Threading/Task.ixx
-	Interface/Threading/TasksComponent.ixx
+	Interface/Threading/ThreadPool.ixx
 
 	# Timers:
 	Interface/Timers/PerformanceTimer.ixx
