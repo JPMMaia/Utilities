@@ -1,7 +1,5 @@
 #include <vector>
 
-import Maia.Utilities.Memory.MemoryPool;
-
 export module Maia.Utilities.Memory.ContiguousMemoryPool;
 
 namespace Maia
