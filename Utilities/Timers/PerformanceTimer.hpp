@@ -19,7 +19,7 @@ namespace Maia
 			{
 				m_start = ClockType::now();
 			}
-			void End()
+			void end()
 			{
 				m_end = ClockType::now();
 			}

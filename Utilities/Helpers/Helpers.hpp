@@ -25,10 +25,10 @@ namespace Maia
 			{
 				using namespace std;
 
-				using ValueType = typename ContainerType::value_type;
+				using value_type = typename ContainerType::value_type;
 
 				// Open file for reading in binary mode, and seek to the end of file immediately:
-				basic_ifstream<ValueType> file(filename, ios::in | ios::binary | ios::ate);
+				basic_ifstream<value_type> file(filename, ios::in | ios::binary | ios::ate);
 				if (!file.good())
 					throw runtime_error("Couldn't open file " + Helpers::WStringToString(filename));
 
@@ -56,12 +56,6 @@ namespace Maia
 				file.write(buffer.data(), buffer.size());
 				if (!file.good())
 					throw runtime_error("Error while writing file " + Helpers::WStringToString(filename));
-			}
-
-			export template<typename FunctionType, typename... ArgumentsType>
-			std::future<typename std::result_of<FunctionType(ArgumentsType...)>::type> RunAsync(FunctionType&& function, ArgumentsType&&... arguments)
-			{
-				return std::async(std::launch::async, std::forward<FunctionType>(function), std::forward<ArgumentsType>(arguments)...);
 			}
 		}
 	}

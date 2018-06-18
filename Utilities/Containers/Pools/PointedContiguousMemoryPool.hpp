@@ -1,7 +1,7 @@
 #include <vector>
 
-import Maia.Utilities.Memory.ContiguousMemoryPool;
-import Maia.Utilities.Memory.MemoryPool;
+import Maia.Utilities.Memory.Contiguous_memory_pool;
+import Maia.Utilities.Memory.Memory_pool;
 
 export module Maia.Utilities.Memory.PointedContiguousMemoryPool;
 
@@ -9,24 +9,24 @@ namespace Maia
 {
 	namespace Utilities
 	{
-		template <class ValueT>
+		template <class T>
 		class PointedContiguousMemoryPool;
 
-		export template <class ValueT>
+		export template <class T>
 		class PointedContiguousMemoryPoolPointer
 		{
 		public:
 
 			// Public member types:
-			using ValueType = ValueT;
-			using SizeType = std::size_t;
+			using value_type = T;
+			using size_type = std::size_t;
 
 			// Element Access:
-			ValueType& operator->() const
+			value_type& operator->() const
 			{
 				return *m_pointer;
 			}
-			ValueType& operator*() const
+			value_type& operator*() const
 			{
 				return *m_pointer;
 			}
@@ -34,26 +34,26 @@ namespace Maia
 		private:
 
 			// Friends:
-			friend PointedContiguousMemoryPool<ValueT>;
+			friend PointedContiguousMemoryPool<T>;
 
 			// Members:
-			ValueType* m_pointer;
+			value_type* m_pointer;
 
 		};
 
-		export template <class ValueT>
+		export template <class T>
 		class PointedContiguousMemoryPool
 		{
 		public:
 			
 			// Public member types:
-			using SizeType = std::size_t;
-			using ValueType = ValueT;
-			using Reference = ValueT&;
-			using ConstReference = const ValueT&;
-			using Iterator = typename std::vector<ValueT>::iterator;
-			using ConstIterator = typename std::vector<ValueT>::const_iterator;
-			using Pointer = PointedContiguousMemoryPoolPointer<ValueT>;
+			using size_type = std::size_t;
+			using value_type = T;
+			using reference = T&;
+			using const_reference = const T&;
+			using iterator = typename std::vector<T>::iterator;
+			using const_iterator = typename std::vector<T>::const_iterator;
+			using pointer = PointedContiguousMemoryPoolPointer<T>;
 
 			// Constructors:
 			PointedContiguousMemoryPool() noexcept = default;
@@ -63,11 +63,11 @@ namespace Maia
 				m_pointers(std::move(other.m_pointers))
 			{
 			}
-			PointedContiguousMemoryPool(SizeType capacity) :
+			PointedContiguousMemoryPool(size_type capacity) :
 				m_elements(),
 				m_pointers()
 			{
-				Reserve(capacity);
+				reserve(capacity);
 			}
 
 			// Copy/move assignment:
@@ -82,53 +82,53 @@ namespace Maia
 			// TODO
 
 			// Iterators:
-			Iterator Begin()
+			iterator begin()
 			{
 				return m_elements.begin();
 			}
-			Iterator End()
+			iterator end()
 			{
 				return m_elements.end();
 			}
 
-			// Capacity:
-			bool Empty() const noexcept
+			// capacity:
+			bool empty() const noexcept
 			{
 				return m_elements.empty();
 			}
-			SizeType Size() const noexcept
+			size_type size() const noexcept
 			{
 				return m_elements.size();
 			}
-			SizeType MaxSize() const noexcept
+			size_type max_size() const noexcept
 			{
 				return m_elements.max_size();
 			}
-			void Reserve(SizeType capacity)
+			void reserve(size_type capacity)
 			{
 				m_elements.reserve(capacity);
 				m_pointers.reserve(capacity);
 			}
-			SizeType Capacity() const noexcept
+			size_type capacity() const noexcept
 			{
 				return m_elements.capacity();
 			}
 
 			// Modifiers:
-			void Clear() noexcept
+			void clear() noexcept
 			{
 				m_elements.clear();
 				m_pointers.clear();
 			}
 			template <class ...ArgumentsT>
-			Pointer EmplaceBack(ArgumentsT&&... arguments)
+			pointer emplace_back(ArgumentsT&&... arguments)
 			{
-				if (Size() == Capacity())
+				if (size() == capacity())
 					throw std::out_of_range("Memory pool is full! Use the reserve method to reserve a block of memory!");
 
 				return m_elements.emplace_back(std::forward<ArgumentsT>(arguments)...);
 			}
-			void SwapWithBackAndPopBack(Iterator position)
+			void swap_with_back_and_pop_back(iterator position)
 			{
 				// Overwrite element at given position by moving the element at the back:
 				*position = std::move(m_elements[m_elements.size() - 1]);
@@ -136,7 +136,7 @@ namespace Maia
 				// Remove element at the back:
 				m_elements.pop_back();
 			}
-			void Swap(ContiguousMemoryPool& other) noexcept
+			void swap(Contiguous_memory_pool& other) noexcept
 			{
 				std::swap(m_elements, other.m_elements);
 			}
@@ -144,8 +144,8 @@ namespace Maia
 		private:
 
 			// Members:
-			ContiguousMemoryPool<ValueType> m_elements;
-			MemoryPool<Pointer> m_pointers;
+			Contiguous_memory_pool<value_type> m_elements;
+			Memory_pool<pointer> m_pointers;
 
 		};
 	}

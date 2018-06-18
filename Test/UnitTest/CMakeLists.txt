@@ -1,29 +1,47 @@
-project(MaiaUtilitiesUnitTest VERSION 0.1.0 LANGUAGES C CXX)
+project(MaiaUtilitiesUnitTest LANGUAGES C CXX)
 
 # Add test executable:
-add_executable(MaiaUtilitiesUnitTest Source/main.cpp)
+add_executable(MaiaUtilitiesUnitTest)
 add_executable(Maia::Utilities::UnitTest ALIAS MaiaUtilitiesUnitTest)
 gtest_discover_tests(MaiaUtilitiesUnitTest)
 
 # Set compile features:
 target_compile_features(MaiaUtilitiesUnitTest PRIVATE cxx_std_17)
+target_compile_options(MaiaUtilitiesUnitTest 
+	PUBLIC 
+		$<$<COMPILE_LANGUAGE:CXX>:/permissive->
+		$<$<COMPILE_LANGUAGE:CXX>:/Za>
+		$<$<COMPILE_LANGUAGE:CXX>:/Zc:rvalueCast>
+)
 
 # Add includes directories:
-target_include_directories(MaiaUtilitiesUnitTest PRIVATE ${GOOGLE_TEST_INCLUDE_DIRECTORY})
+target_include_directories(MaiaUtilitiesUnitTest 
+	PRIVATE 
+		${GOOGLE_TEST_INCLUDE_DIRECTORY}
+		${CMAKE_SOURCE_DIR}
+)
 
 # Add test sources:
-target_sources(MaiaUtilitiesUnitTest PRIVATE
+target_sources(MaiaUtilitiesUnitTest 
+	
+	PRIVATE
 
-	# Math:
-	Source/Math/MathHelpersTest.cpp
+		Source/main.cpp
 
-	# Memory:
-	Source/Memory/ContiguousMemoryPoolTest.cpp
-	Source/Memory/MemoryPoolTest.cpp
-	Source/Memory/PointedContiguousMemoryPoolTest.cpp
+		# Allocators
+		Source/Allocators/BuddyAllocatorTest.cpp
+		Source/Allocators/ForwardAllocatorTest.cpp
 
-	# Threading:
-	Source/Threading/ThreadPoolTest.cpp
+		# Containers:
+		Source/Containers/Pools/ContiguousMemoryPoolTest.cpp
+		Source/Containers/Pools/MemoryPoolTest.cpp
+		Source/Containers/Pools/PointedContiguousMemoryPoolTest.cpp
+
+		# Math:
+		Source/Math/MathHelpersTest.cpp
+
+		# Threading:
+		Source/Threading/ThreadPoolTest.cpp
 
 )
 
