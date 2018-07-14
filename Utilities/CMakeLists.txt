@@ -14,6 +14,7 @@ target_sources(MaiaUtilities
 		# Allocators:
 		Allocators/BuddyAllocator.hpp
 		Allocators/ForwardAllocator.hpp
+		Allocators/MemoryArena.hpp
 
 		# Containers:
 		Containers/Pools/ContiguousMemoryPool.hpp

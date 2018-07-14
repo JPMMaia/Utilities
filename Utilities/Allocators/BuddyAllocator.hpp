@@ -5,6 +5,8 @@ namespace Maia::Utilities
 {
 	class Buddy_allocator
 	{
+	public:
+
 
 	};
 }
