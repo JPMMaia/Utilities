@@ -9,12 +9,10 @@ target_sources(MaiaUtilities
 
 	PRIVATE
 
-		Utilities.cpp
-
 		# Allocators:
-		Allocators/BuddyAllocator.hpp
-		Allocators/ForwardAllocator.hpp
-		Allocators/MemoryArena.hpp
+		Allocators/Buddy_allocator.hpp
+		Allocators/Forward_allocator.hpp
+		Allocators/Memory_arena.hpp
 
 		# Containers:
 		Containers/Pools/ContiguousMemoryPool.hpp

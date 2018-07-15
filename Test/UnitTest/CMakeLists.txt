@@ -29,8 +29,8 @@ target_sources(MaiaUtilitiesUnitTest
 		Source/main.cpp
 
 		# Allocators
-		Source/Allocators/BuddyAllocatorTest.cpp
-		Source/Allocators/ForwardAllocatorTest.cpp
+		Source/Allocators/Buddy_allocator_test.cpp
+		Source/Allocators/Forward_allocator_test.cpp
 
 		# Containers:
 		Source/Containers/Pools/ContiguousMemoryPoolTest.cpp

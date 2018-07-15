@@ -5,7 +5,7 @@
 #include <memory>
 #include <type_traits>
 
-#include <Maia/Utilities/Allocators/MemoryArena.hpp>
+#include <Maia/Utilities/Allocators/Memory_arena.hpp>
 
 namespace Maia::Utilities
 {
