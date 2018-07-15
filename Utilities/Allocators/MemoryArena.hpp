@@ -11,37 +11,46 @@ namespace Maia::Utilities
 	{
 	public:
 
-		explicit Memory_arena(std::size_t size_in_bytes) :
+		explicit Memory_arena(std::size_t const size_in_bytes) :
 			m_data{ std::make_unique<std::byte[]>(size_in_bytes) },
 			m_size_in_bytes{ size_in_bytes },
 			m_offset_in_bytes{ 0 }
 		{
 		}
-		Memory_arena(const Memory_arena&) = delete;
+		Memory_arena(Memory_arena const&) = delete;
 		Memory_arena(Memory_arena&& other) = delete;
 
-		Memory_arena& operator=(const Memory_arena&) = delete;
+		Memory_arena& operator=(Memory_arena const&) = delete;
 		Memory_arena& operator=(Memory_arena&&) = delete;
 
-		void* allocate(std::size_t size_in_bytes, std::size_t alignment_in_bytes)
+		void* allocate(std::size_t const size_in_bytes, std::size_t const alignment_in_bytes)
 		{
 			void* data = m_data.get() + m_offset_in_bytes;
 			
 			auto const original_space = m_size_in_bytes - m_offset_in_bytes;
-			auto new_space = original_space;
+			auto original_space_minus_alignment = original_space;
 
-			if (!std::align(alignment_in_bytes, size_in_bytes, data, new_space))
+			if (!std::align(alignment_in_bytes, size_in_bytes, data, original_space_minus_alignment))
 			{
 				throw std::bad_alloc();
 			}
 
-			auto const offset = original_space - new_space;
-			m_offset_in_bytes += offset;
+			auto const bytes_used_for_alignment = original_space - original_space_minus_alignment;
+			m_offset_in_bytes += size_in_bytes + bytes_used_for_alignment;
 
 			return data;
 		}
-		void deallocate(void* data, std::size_t size_in_bytes)
+		void deallocate(void* const data, std::size_t const size_in_bytes) noexcept
 		{
+		}
+
+		std::size_t capacity() const noexcept
+		{
+			return m_size_in_bytes;
+		}
+		std::size_t used_capacity() const noexcept
+		{
+			return m_offset_in_bytes;
 		}
 
 	private:
