@@ -3,51 +3,58 @@
 
 #include <cstddef>
 #include <memory>
+#include <type_traits>
+
+#include <Utilities/Allocators/MemoryArena.hpp>
 
 namespace Maia::Utilities
 {
-	class Memory_arena;
-
 	template <class T>
 	class Forward_allocator
 	{
 	public:
 
-		template <typename U> friend class Forward_allocator;
+		template <class U> friend class Forward_allocator;
 
 		using value_type = T;
-		using size_type = std::size_t;
-		using difference_type = std::ptrdiff_t;
-		using is_always_equal = std::false_type;
 
 		using propagate_on_container_copy_assignment = std::true_type;
 		using propagate_on_container_move_assignment = std::true_type;
 		using propagate_on_container_swap = std::true_type;
 
-		Forward_allocator(Memory_arena& memory_arena) noexcept
+		explicit Forward_allocator(Memory_arena& memory_arena) noexcept
 			: m_memory_arena(memory_arena)
 		{
 		}
 
 		template <class U>
 		constexpr Forward_allocator(Forward_allocator<U> const& other) noexcept
+			: m_memory_arena(other.m_memory_arena)
 		{
 		}
 
-		//[[nodiscard]]
-		T* allocate(std::size_t numElements)
+		[[nodiscard]]
+		T* allocate(std::size_t const num_elements)
 		{
-			return nullptr;
+			auto const size_in_bytes = num_elements * sizeof(T);
+			auto const alignment_in_bytes = alignof(T);
+
+			auto* rawData = m_memory_arena.allocate(size_in_bytes, alignment_in_bytes);
+
+			return static_cast<T*>(rawData);
 		}
 
-		void deallocate(T* ptr, std::size_t numElements) noexcept
+		void deallocate(T* const data, std::size_t const num_elements) noexcept
 		{
+			auto const size_in_bytes = num_elements * sizeof(T);
+
+			m_memory_arena.deallocate(data, size_in_bytes);
 		}
 
 		template <class U>
 		bool operator==(Forward_allocator<U> const& rhs) const noexcept
 		{
-			return m_memory_arena == rhs.m_memory_arena;
+			return &m_memory_arena == &rhs.m_memory_arena;
 		}
 
 	private:
