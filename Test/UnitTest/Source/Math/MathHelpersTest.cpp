@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include <Utilities/Math/MathHelpers.hpp>
+#include <Maia/Utilities/Math/MathHelpers.hpp>
 
 namespace Maia::Utilities::Test
 {

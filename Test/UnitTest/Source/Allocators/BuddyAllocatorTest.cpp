@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include <Utilities/Allocators/BuddyAllocator.hpp>
+#include <Maia/Utilities/Allocators/BuddyAllocator.hpp>
 
 namespace Maia::Utilities::Test
 {

@@ -2,7 +2,7 @@
 
 #include <gtest/gtest.h>
 
-#include <Utilities/Allocators/ForwardAllocator.hpp>
+#include <Maia/Utilities/Allocators/ForwardAllocator.hpp>
 
 namespace Maia::Utilities::Test
 {

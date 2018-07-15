@@ -2,7 +2,7 @@
 
 #include <gtest/gtest.h>
 
-#include <Utilities/Containers/Pools/MemoryPool.hpp>
+#include <Maia/Utilities/Containers/Pools/MemoryPool.hpp>
 
 using namespace Maia::Utilities;
 

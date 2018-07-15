@@ -3,7 +3,7 @@
 
 #include <gtest/gtest.h>
 
-#include <Utilities/Containers/Pools/ContiguousMemoryPool.hpp>
+#include <Maia/Utilities/Containers/Pools/ContiguousMemoryPool.hpp>
 
 using namespace Maia::Utilities;
 

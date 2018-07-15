@@ -3,7 +3,7 @@ project(MaiaUtilities LANGUAGES C CXX)
 add_library(MaiaUtilities)
 add_library(Maia::Utilities ALIAS MaiaUtilities)
 
-target_include_directories(MaiaUtilities PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/..")
+target_include_directories(MaiaUtilities PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/../..")
 
 target_sources(MaiaUtilities 
 

@@ -17,8 +17,8 @@ target_compile_options(MaiaUtilitiesUnitTest
 # Add includes directories:
 target_include_directories(MaiaUtilitiesUnitTest 
 	PRIVATE 
-		${GOOGLE_TEST_INCLUDE_DIRECTORY}
-		${CMAKE_SOURCE_DIR}
+		"${GOOGLE_TEST_INCLUDE_DIRECTORY}"
+		"${CMAKE_SOURCE_DIR}/Source"
 )
 
 # Add test sources:
