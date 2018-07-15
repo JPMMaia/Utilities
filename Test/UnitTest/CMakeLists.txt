@@ -1,11 +1,9 @@
 project(MaiaUtilitiesUnitTest LANGUAGES C CXX)
 
-# Add test executable:
 add_executable(MaiaUtilitiesUnitTest)
 add_executable(Maia::Utilities::UnitTest ALIAS MaiaUtilitiesUnitTest)
 gtest_discover_tests(MaiaUtilitiesUnitTest)
 
-# Set compile features:
 target_compile_features(MaiaUtilitiesUnitTest PRIVATE cxx_std_17)
 target_compile_options(MaiaUtilitiesUnitTest 
 	PUBLIC 
@@ -14,38 +12,31 @@ target_compile_options(MaiaUtilitiesUnitTest
 		$<$<COMPILE_LANGUAGE:CXX>:/Zc:rvalueCast>
 )
 
-# Add includes directories:
 target_include_directories(MaiaUtilitiesUnitTest 
 	PRIVATE 
 		"${GOOGLE_TEST_INCLUDE_DIRECTORY}"
 		"${CMAKE_SOURCE_DIR}/Source"
 )
 
-# Add test sources:
 target_sources(MaiaUtilitiesUnitTest 
 	
 	PRIVATE
 
-		Source/main.cpp
+		main.cpp
 
-		# Allocators
-		Source/Allocators/Buddy_allocator_test.cpp
-		Source/Allocators/Forward_allocator_test.cpp
+		Allocators/Buddy_allocator_test.cpp
+		Allocators/Forward_allocator_test.cpp
 
-		# Containers:
-		Source/Containers/Pools/ContiguousMemoryPoolTest.cpp
-		Source/Containers/Pools/MemoryPoolTest.cpp
-		Source/Containers/Pools/PointedContiguousMemoryPoolTest.cpp
+		Containers/Pools/ContiguousMemoryPoolTest.cpp
+		Containers/Pools/MemoryPoolTest.cpp
+		Containers/Pools/PointedContiguousMemoryPoolTest.cpp
 
-		# Math:
-		Source/Math/MathHelpersTest.cpp
+		Math/MathHelpersTest.cpp
 
-		# Threading:
-		Source/Threading/ThreadPoolTest.cpp
+		Threading/ThreadPoolTest.cpp
 
 )
 
-# Link Google Test and Google Mock libraries:
 target_link_libraries(MaiaUtilitiesUnitTest 
 	debug ${GTEST_DEBUG_LIBRARY} optimized ${GTEST_RELEASE_LIBRARY}
 	debug ${GTEST_MAIN_DEBUG_LIBRARY} optimized ${GTEST_MAIN_RELEASE_LIBRARY}
@@ -53,5 +44,4 @@ target_link_libraries(MaiaUtilitiesUnitTest
 	debug ${GMOCK_MAIN_DEBUG_LIBRARY} optimized ${GMOCK_MAIN_RELEASE_LIBRARY}
 )
 
-# Link libraries:
 target_link_libraries(MaiaUtilitiesUnitTest Maia::Utilities)
