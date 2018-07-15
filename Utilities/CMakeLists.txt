@@ -1,10 +1,10 @@
 project(MaiaUtilities LANGUAGES C CXX)
 
-# Add library to the project and define alias:
 add_library(MaiaUtilities)
 add_library(Maia::Utilities ALIAS MaiaUtilities)
 
-# Add sources:
+target_include_directories(MaiaUtilities PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/..")
+
 target_sources(MaiaUtilities 
 
 	PRIVATE
@@ -36,9 +36,7 @@ target_sources(MaiaUtilities
 		
 )
 
-# Set target linker language:
 set_target_properties(MaiaUtilities PROPERTIES LINKER_LANGUAGE CXX)
 
-# Set compile features:
 target_compile_features(MaiaUtilities PRIVATE cxx_std_17)
 target_compile_options(MaiaUtilities PUBLIC $<$<COMPILE_LANGUAGE:CXX>:/permissive->)
