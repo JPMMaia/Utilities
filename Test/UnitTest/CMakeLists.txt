@@ -1,47 +1,48 @@
-project(MaiaUtilitiesUnitTest LANGUAGES C CXX)
+project (MaiaUtilitiesUnitTest)
 
-add_executable(MaiaUtilitiesUnitTest)
-add_executable(Maia::Utilities::UnitTest ALIAS MaiaUtilitiesUnitTest)
-gtest_discover_tests(MaiaUtilitiesUnitTest)
+add_executable (MaiaUtilitiesUnitTest)
+add_executable (Maia::Utilities::UnitTest ALIAS MaiaUtilitiesUnitTest)
 
-target_compile_features(MaiaUtilitiesUnitTest PRIVATE cxx_std_17)
-target_compile_options(MaiaUtilitiesUnitTest 
-	PUBLIC 
-		$<$<COMPILE_LANGUAGE:CXX>:/permissive->
-		$<$<COMPILE_LANGUAGE:CXX>:/Za>
-		$<$<COMPILE_LANGUAGE:CXX>:/Zc:rvalueCast>
-)
+target_compile_features (MaiaUtilitiesUnitTest PRIVATE cxx_std_17)
+
+if (MSVC)
+	target_compile_options(MaiaUtilitiesUnitTest
+		PRIVATE
+			/permissive-
+			/Za
+			/Zc:rvalueCast
+	)
+endif ()
 
 target_include_directories(MaiaUtilitiesUnitTest 
-	PRIVATE 
-		"${GOOGLE_TEST_INCLUDE_DIRECTORY}"
+	PRIVATE
 		"${CMAKE_SOURCE_DIR}/Source"
 )
 
-target_sources(MaiaUtilitiesUnitTest 
-	
+target_link_libraries (MaiaUtilitiesUnitTest PRIVATE Maia::Utilities)
+
+find_package (GTest REQUIRED)
+target_link_libraries (MaiaUtilitiesUnitTest PRIVATE GTest::GTest GTest::Main)
+
+find_package (GMock REQUIRED)
+target_link_libraries (MaiaUtilitiesUnitTest PRIVATE GMock::GMock GMock::Main)
+
+target_sources (MaiaUtilitiesUnitTest 
 	PRIVATE
 
-		main.cpp
+		"main.cpp"
 
-		Allocators/Buddy_allocator_test.cpp
-		Allocators/Forward_allocator_test.cpp
+		"Allocators/Buddy_allocator_test.cpp"
+		"Allocators/Forward_allocator_test.cpp"
 
-		Containers/Pools/ContiguousMemoryPoolTest.cpp
-		Containers/Pools/MemoryPoolTest.cpp
-		Containers/Pools/PointedContiguousMemoryPoolTest.cpp
+		"Containers/Pools/ContiguousMemoryPoolTest.cpp"
+		"Containers/Pools/MemoryPoolTest.cpp"
+		"Containers/Pools/PointedContiguousMemoryPoolTest.cpp"
 
-		Math/MathHelpersTest.cpp
+		"Math/MathHelpersTest.cpp"
 
-		Threading/ThreadPoolTest.cpp
+		"Threading/ThreadPoolTest.cpp"
 
 )
 
-target_link_libraries(MaiaUtilitiesUnitTest 
-	debug ${GTEST_DEBUG_LIBRARY} optimized ${GTEST_RELEASE_LIBRARY}
-	debug ${GTEST_MAIN_DEBUG_LIBRARY} optimized ${GTEST_MAIN_RELEASE_LIBRARY}
-	debug ${GMOCK_DEBUG_LIBRARY} optimized ${GMOCK_RELEASE_LIBRARY}
-	debug ${GMOCK_MAIN_DEBUG_LIBRARY} optimized ${GMOCK_MAIN_RELEASE_LIBRARY}
-)
-
-target_link_libraries(MaiaUtilitiesUnitTest Maia::Utilities)
+gtest_discover_tests (MaiaUtilitiesUnitTest)

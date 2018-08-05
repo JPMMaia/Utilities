@@ -1,40 +1,32 @@
-project(MaiaUtilities LANGUAGES C CXX)
+project (MaiaUtilities)
 
-add_library(MaiaUtilities)
-add_library(Maia::Utilities ALIAS MaiaUtilities)
+add_library (MaiaUtilities INTERFACE)
+add_library (Maia::Utilities ALIAS MaiaUtilities)
 
-target_include_directories(MaiaUtilities PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/../..")
-
-target_sources(MaiaUtilities 
-
-	PRIVATE
-
-		# Allocators:
-		Allocators/Buddy_allocator.hpp
-		Allocators/Forward_allocator.hpp
-		Allocators/Memory_arena.hpp
-
-		# Containers:
-		Containers/Pools/ContiguousMemoryPool.hpp
-		Containers/Pools/MemoryPool.hpp
-		Containers/Pools/PointedContiguousMemoryPool.hpp
-
-		# Helpers:
-		Helpers/Helpers.hpp
-
-		# Math:
-		Math/MathHelpers.hpp
-
-		# Threading:
-		Threading/ThreadPool.hpp
-
-		# Timers:
-		Timers/PerformanceTimer.hpp
-		Timers/Timer.hpp
-		
+target_compile_features (MaiaUtilities 
+	INTERFACE
+		cxx_std_17
 )
 
-set_target_properties(MaiaUtilities PROPERTIES LINKER_LANGUAGE CXX)
+target_include_directories (MaiaUtilities INTERFACE "${CMAKE_CURRENT_LIST_DIR}/../..")
 
-target_compile_features(MaiaUtilities PRIVATE cxx_std_17)
-target_compile_options(MaiaUtilities PUBLIC $<$<COMPILE_LANGUAGE:CXX>:/permissive->)
+target_sources(MaiaUtilities 
+	INTERFACE
+
+		"${CMAKE_CURRENT_LIST_DIR}/Allocators/Buddy_allocator.hpp"
+		"${CMAKE_CURRENT_LIST_DIR}/Allocators/Forward_allocator.hpp"
+		"${CMAKE_CURRENT_LIST_DIR}/Allocators/Memory_arena.hpp"
+		
+		"${CMAKE_CURRENT_LIST_DIR}/Containers/Pools/ContiguousMemoryPool.hpp"
+		"${CMAKE_CURRENT_LIST_DIR}/Containers/Pools/MemoryPool.hpp"
+		"${CMAKE_CURRENT_LIST_DIR}/Containers/Pools/PointedContiguousMemoryPool.hpp"
+
+		"${CMAKE_CURRENT_LIST_DIR}/Helpers/Helpers.hpp"
+
+		"${CMAKE_CURRENT_LIST_DIR}/Math/MathHelpers.hpp"
+
+		"${CMAKE_CURRENT_LIST_DIR}/Threading/ThreadPool.hpp"
+
+		"${CMAKE_CURRENT_LIST_DIR}/Timers/PerformanceTimer.hpp"
+		"${CMAKE_CURRENT_LIST_DIR}/Timers/Timer.hpp"
+)
