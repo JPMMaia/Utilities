@@ -19,6 +19,7 @@ target_include_directories(MaiaUtilitiesUnitTest
 		"${CMAKE_SOURCE_DIR}/Source"
 )
 
+#find_package (MaiaUtilities REQUIRED)
 target_link_libraries (MaiaUtilitiesUnitTest PRIVATE Maia::Utilities)
 
 find_package (GTest REQUIRED)
