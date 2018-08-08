@@ -6,8 +6,8 @@ function (_find_gmock_library _var _name)
 
     find_library (${_var} ${_name}
         HINTS
-            "$ENV{GMOCK_ROOT}/lib"
-            "${GMOCK_ROOT}/lib"
+            "$ENV{GMock_ROOT}/lib"
+            "${GMock_ROOT}/lib"
             "$ENV{GTEST_ROOT}/lib"
             "${GTEST_ROOT}/lib"
     )
@@ -40,41 +40,41 @@ endfunction ()
 # Content #
 ###########
 
-find_path (GMOCK_INCLUDE_DIR "gmock/gmock.h"
+find_path (GMock_INCLUDE_DIR "gmock/gmock.h"
     HINTS
-        "$ENV{GMOCK_ROOT}/include"
-        "${GMOCK_ROOT}/include"
+        "$ENV{GMock_ROOT}/include"
+        "${GMock_ROOT}/include"
         "$ENV{GTEST_ROOT}/include"
         "${GTEST_ROOT}/include"
 )
-mark_as_advanced (GMOCK_INCLUDE_DIR)
+mark_as_advanced (GMock_INCLUDE_DIR)
 
-_find_gmock_library (GMOCK_LIBRARY "gmock")
-_find_gmock_library (GMOCK_DEBUG_LIBRARY "gmockd")
-_find_gmock_library (GMOCK_MAIN_LIBRARY "gmock_main")
-_find_gmock_library (GMOCK_MAIN_DEBUG_LIBRARY "gmock_maind")
+_find_gmock_library (GMock_LIBRARY "gmock")
+_find_gmock_library (GMock_DEBUG_LIBRARY "gmockd")
+_find_gmock_library (GMock_MAIN_LIBRARY "gmock_main")
+_find_gmock_library (GMock_MAIN_DEBUG_LIBRARY "gmock_maind")
 
 include (FindPackageHandleStandardArgs)
-find_package_handle_standard_args (GMOCK
+find_package_handle_standard_args (GMock
     REQUIRED_VARS 
-        GMOCK_LIBRARY
-        GMOCK_MAIN_LIBRARY
-        GMOCK_INCLUDE_DIR
+        GMock_LIBRARY
+        GMock_MAIN_LIBRARY
+        GMock_INCLUDE_DIR
 )
 
-if (GMOCK_FOUND)
+if (GMock_FOUND)
 
     if (NOT TARGET GMock::GMock)
 
         add_library (GMock::GMock UNKNOWN IMPORTED)
         set_target_properties (GMock::GMock PROPERTIES
-            INTERFACE_INCLUDE_DIRECTORIES "${GMOCK_INCLUDE_DIR}"
+            INTERFACE_INCLUDE_DIRECTORIES "${GMock_INCLUDE_DIR}"
         )
 
-        _set_gmock_library_config_properties (GMock::GMock ${GMOCK_LIBRARY} "RELEASE")
+        _set_gmock_library_config_properties (GMock::GMock ${GMock_LIBRARY} "RELEASE")
 
-        if (EXISTS "${GMOCK_DEBUG_LIBRARY}")
-            _set_gmock_library_config_properties (GMock::GMock ${GMOCK_DEBUG_LIBRARY} "DEBUG")
+        if (EXISTS "${GMock_DEBUG_LIBRARY}")
+            _set_gmock_library_config_properties (GMock::GMock ${GMock_DEBUG_LIBRARY} "DEBUG")
         endif()
 
     endif ()
@@ -83,13 +83,13 @@ if (GMOCK_FOUND)
 
         add_library(GMock::Main UNKNOWN IMPORTED)
         set_target_properties (GMock::Main PROPERTIES
-            INTERFACE_INCLUDE_DIRECTORIES "${GMOCK_INCLUDE_DIR}"
+            INTERFACE_INCLUDE_DIRECTORIES "${GMock_INCLUDE_DIR}"
         )
 
-        _set_gmock_library_config_properties (GMock::Main ${GMOCK_MAIN_LIBRARY} "RELEASE")
+        _set_gmock_library_config_properties (GMock::Main ${GMock_MAIN_LIBRARY} "RELEASE")
 
-        if (EXISTS "${GMOCK_DEBUG_LIBRARY}")
-            _set_gmock_library_config_properties (GMock::Main ${GMOCK_MAIN_DEBUG_LIBRARY} "DEBUG")
+        if (EXISTS "${GMock_DEBUG_LIBRARY}")
+            _set_gmock_library_config_properties (GMock::Main ${GMock_MAIN_DEBUG_LIBRARY} "DEBUG")
         endif()
         
     endif ()
