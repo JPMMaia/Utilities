@@ -18,6 +18,9 @@ target_include_directories (MaiaUtilities
 		$<INSTALL_INTERFACE:include/Maia/Utilities>
 )
 
+find_package (GSL REQUIRED)
+target_link_libraries (MaiaUtilities PUBLIC GSL::GSL)
+
 target_sources(MaiaUtilities 
 	PRIVATE
 
