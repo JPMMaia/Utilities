@@ -16,7 +16,9 @@ if (NOT GSL_INCLUDE_DIR)
     if (NOT gsl_POPULATED)
         
         FetchContent_Populate (GSL)
-        find_package_handle_standard_args (GSL REQUIRED_VARS gsl_SOURCE_DIR)
+
+        find_path (GSL_INCLUDE_DIR "gsl/gsl" HINTS "${gsl_SOURCE_DIR}/include" NO_DEFAULT_PATH)
+        find_package_handle_standard_args (GSL REQUIRED_VARS GSL_INCLUDE_DIR)
 
         if (GSL_FOUND AND NOT TARGET GSL::GSL)
             add_subdirectory (${gsl_SOURCE_DIR} ${gsl_BINARY_DIR})
@@ -25,7 +27,8 @@ if (NOT GSL_INCLUDE_DIR)
 
     else ()
 
-        find_package_handle_standard_args (GSL REQUIRED_VARS gsl_SOURCE_DIR)
+        find_path (GSL_INCLUDE_DIR "gsl/gsl" HINTS "${gsl_SOURCE_DIR}/include" NO_DEFAULT_PATH)
+        find_package_handle_standard_args (GSL REQUIRED_VARS GSL_INCLUDE_DIR)
 
     endif ()
 
