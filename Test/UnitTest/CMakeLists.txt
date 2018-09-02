@@ -16,17 +16,13 @@ endif ()
 
 target_include_directories(MaiaUtilitiesUnitTest 
 	PRIVATE
-		"${CMAKE_SOURCE_DIR}/Source"
+		"${CMAKE_CURRENT_LIST_DIR}"
 )
 
-#find_package (MaiaUtilities REQUIRED)
 target_link_libraries (MaiaUtilitiesUnitTest PRIVATE Maia::Utilities)
 
-find_package (GTest REQUIRED)
-target_link_libraries (MaiaUtilitiesUnitTest PRIVATE GTest::GTest GTest::Main)
-
-find_package (GMock REQUIRED)
-target_link_libraries (MaiaUtilitiesUnitTest PRIVATE GMock::GMock GMock::Main)
+find_package (Catch2 REQUIRED)
+target_link_libraries (MaiaUtilitiesUnitTest PRIVATE Catch2::Catch2)
 
 target_sources (MaiaUtilitiesUnitTest 
 	PRIVATE
@@ -46,4 +42,5 @@ target_sources (MaiaUtilitiesUnitTest
 
 )
 
-gtest_discover_tests (MaiaUtilitiesUnitTest)
+include (Catch)
+catch_discover_tests (MaiaUtilitiesUnitTest)
