@@ -30,4 +30,6 @@ else ()
     include (FindPackageHandleStandardArgs)
     find_package_handle_standard_args (Catch2 REQUIRED_VARS catch2_INCLUDE_DIR)
 
+    list (APPEND CMAKE_MODULE_PATH "${catch2_SOURCE_DIR}/contrib")
+
 endif ()
