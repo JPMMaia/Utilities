@@ -1,8 +1,7 @@
 include (FetchContent)
 FetchContent_Declare (
     Catch2
-    GIT_REPOSITORY "https://github.com/catchorg/Catch2.git"
-    GIT_TAG "v2.3.0"
+    URL "https://github.com/catchorg/Catch2/archive/v2.4.1.zip"
 )
 
 FetchContent_GetProperties (Catch2)
