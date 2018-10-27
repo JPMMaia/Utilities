@@ -5,15 +5,6 @@ add_executable (Maia::Utilities::UnitTest ALIAS MaiaUtilitiesUnitTest)
 
 target_compile_features (MaiaUtilitiesUnitTest PRIVATE cxx_std_17)
 
-if (MSVC)
-	target_compile_options(MaiaUtilitiesUnitTest
-		PRIVATE
-			/permissive-
-			/Za
-			/Zc:rvalueCast
-	)
-endif ()
-
 target_include_directories(MaiaUtilitiesUnitTest 
 	PRIVATE
 		"${CMAKE_CURRENT_LIST_DIR}"
@@ -29,16 +20,19 @@ target_sources (MaiaUtilitiesUnitTest
 
 		"main.cpp"
 
-		"Allocators/Buddy_allocator_test.cpp"
-		"Allocators/Forward_allocator_test.cpp"
+		#"Allocators/Buddy_allocator_test.cpp"
+		#"Allocators/Forward_allocator_test.cpp"
 
-		"Containers/Pools/ContiguousMemoryPoolTest.cpp"
-		"Containers/Pools/MemoryPoolTest.cpp"
-		"Containers/Pools/PointedContiguousMemoryPoolTest.cpp"
+		#"Containers/Pools/ContiguousMemoryPoolTest.cpp"
+		#"Containers/Pools/MemoryPoolTest.cpp"
+		#"Containers/Pools/PointedContiguousMemoryPoolTest.cpp"
 
-		"Math/MathHelpersTest.cpp"
+		"Containers/Chunks/Memory_chunk.test.cpp"
+		"Containers/Chunks/Memory_chunks.test.cpp"
 
-		"Threading/ThreadPoolTest.cpp"
+		#"Math/MathHelpersTest.cpp"
+
+		#"Threading/ThreadPoolTest.cpp"
 
 )
 

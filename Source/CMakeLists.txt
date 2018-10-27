@@ -32,6 +32,9 @@ target_sources(MaiaUtilities
 		"Maia/Utilities/Containers/Pools/MemoryPool.hpp"
 		"Maia/Utilities/Containers/Pools/PointedContiguousMemoryPool.hpp"
 
+		"Maia/Utilities/Containers/Chunks/Memory_chunk.hpp"
+		"Maia/Utilities/Containers/Chunks/Memory_chunks.hpp"
+		
 		"Maia/Utilities/Helpers/Helpers.hpp"
 
 		"Maia/Utilities/Math/MathHelpers.hpp"
