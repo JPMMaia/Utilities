@@ -1,6 +1,6 @@
 project (MaiaUtilities VERSION 0.0.1)
 
-add_library (MaiaUtilities OBJECT)
+add_library (MaiaUtilities)
 add_library (Maia::Utilities ALIAS MaiaUtilities)
 
 set_target_properties (MaiaUtilities PROPERTIES
@@ -18,8 +18,14 @@ target_include_directories (MaiaUtilities
 		$<INSTALL_INTERFACE:include/Maia/Utilities>
 )
 
+find_package (Eigen3 3.3 NO_MODULE REQUIRED)
+target_link_libraries (MaiaUtilities PUBLIC Eigen3::Eigen)
+
 find_package (GSL REQUIRED)
 target_link_libraries (MaiaUtilities PUBLIC GSL::GSL)
+
+find_package (nlohmann_json 3.5.0 REQUIRED)
+target_link_libraries (MaiaUtilities PUBLIC nlohmann_json::nlohmann_json)
 
 target_sources(MaiaUtilities 
 	PRIVATE
@@ -36,6 +42,9 @@ target_sources(MaiaUtilities
 		"Maia/Utilities/Containers/Chunks/Memory_chunks.hpp"
 		
 		"Maia/Utilities/Helpers/Helpers.hpp"
+
+		"Maia/Utilities/glTF/glTF.hpp"
+		"Maia/Utilities/glTF/glTF.cpp"
 
 		"Maia/Utilities/Math/MathHelpers.hpp"
 
