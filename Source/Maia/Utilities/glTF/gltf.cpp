@@ -65,6 +65,38 @@ namespace nlohmann
 			}
 		}
 	};
+
+	template <>
+	struct adl_serializer<Maia::Utilities::glTF::Accessor::Type>
+	{
+		static void to_json(json& j, Maia::Utilities::glTF::Accessor::Type const& value)
+		{
+		}
+
+		static void from_json(const json& j, Maia::Utilities::glTF::Accessor::Type& value)
+		{
+			using namespace Maia::Utilities::glTF;
+
+			std::string string_value = j.get<std::string>();
+			
+			if (string_value == "SCALAR")
+				value = Accessor::Type::Scalar;
+			else if (string_value == "VEC2")
+				value = Accessor::Type::Vector2;
+			else if (string_value == "VEC3")
+				value = Accessor::Type::Vector3;
+			else if (string_value == "VEC4")
+				value = Accessor::Type::Vector4;
+			else if (string_value == "MAT2")
+				value = Accessor::Type::Matrix2x2;
+			else if (string_value == "MAT3")
+				value = Accessor::Type::Matrix3x3;
+			else if (string_value == "MAT4")
+				value = Accessor::Type::Matrix4x4;
+			else
+				throw std::invalid_argument{"String value does not match any of the possible values"};
+		}
+	};
 }
 
 namespace Maia::Utilities::glTF
@@ -92,6 +124,24 @@ namespace Maia::Utilities::glTF
 		}
 	}
 
+
+	std::uint8_t size_of(Component_type component_type)
+	{
+		switch (component_type)
+		{
+		case Component_type::Byte: 
+		case Component_type::Unsigned_byte:
+			return 1;
+		case Component_type::Short: 
+		case Component_type::Unsigned_short:
+			return 2;
+		case Component_type::Unsigned_int:
+		case Component_type::Float:
+			return 4;
+		default: assert(false); return 1;
+		}
+	}
+
 	
 	void from_json(nlohmann::json const& json, Accessor& value)
 	{
@@ -101,6 +151,20 @@ namespace Maia::Utilities::glTF
 		json.at("type").get_to(value.type);
 		get_to_if_exists(json, "max", value.max);
 		get_to_if_exists(json, "min", value.min);
+	}
+	std::uint8_t size_of(Accessor::Type accessor_type)
+	{
+		switch (accessor_type)
+		{
+		case Accessor::Type::Scalar: return 1;
+		case Accessor::Type::Vector2: return 2;
+		case Accessor::Type::Vector3: return 3;
+		case Accessor::Type::Vector4: return 4;
+		case Accessor::Type::Matrix2x2: return 4;
+		case Accessor::Type::Matrix3x3: return 9;
+		case Accessor::Type::Matrix4x4: return 16;
+		default: assert(false); return 1;
+		}
 	}
 
 	

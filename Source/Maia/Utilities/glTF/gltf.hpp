@@ -12,18 +12,43 @@
 
 namespace Maia::Utilities::glTF
 {
+	enum class Component_type
+	{
+		Byte = 5120,
+		Unsigned_byte = 5121,
+		Short = 5122,
+		Unsigned_short = 5123,
+		Unsigned_int = 5125,
+		Float = 5126
+	};
+	
+	std::uint8_t size_of(Component_type component_type);
+
+
 	struct Accessor
 	{
+		enum class Type
+		{
+			Scalar,
+			Vector2,
+			Vector3,
+			Vector4,
+			Matrix2x2,
+			Matrix3x3,
+			Matrix4x4
+		};
+
 		std::optional<std::size_t> buffer_view_index;
-		std::size_t component_type;
+		Component_type component_type;
 		std::size_t count;
-		std::string type;
+		Type type;
 		std::optional<Eigen::Vector3f> max;
 		std::optional<Eigen::Vector3f> min;
 	};
 
 	void from_json(nlohmann::json const& json, Accessor& value);
 	void to_json(nlohmann::json& json, Accessor const& value);
+	std::uint8_t size_of(Accessor::Type accessor_type);
 
 
 	struct Buffer
