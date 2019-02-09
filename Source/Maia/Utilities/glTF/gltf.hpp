@@ -120,7 +120,6 @@ namespace Maia::Utilities::glTF
 
 	struct Node
 	{
-		Eigen::Matrix4f matrix{ Eigen::Matrix4f::Identity() };
 		std::optional<std::size_t> mesh_index;
 		Eigen::Quaternionf rotation{ Eigen::Quaternionf::Identity() };
 		Eigen::Vector3f scale{ Eigen::Vector3f::Ones() };

@@ -216,14 +216,57 @@ namespace Maia::Utilities::glTF
 		json.at("primitives").get_to(value.primitives);
 	}
 
+	
+	namespace
+	{
+		struct Transform
+		{
+			Eigen::Vector3f translation;
+			Eigen::Quaternionf rotation;
+			Eigen::Vector3f scale;
+		};
+
+		Transform decompose(Eigen::Matrix4f const& matrix)
+		{
+			const Eigen::Affine3f transform{ matrix };
+			
+			Eigen::Matrix3f rotationMatrix;
+			Eigen::Matrix3f scaleMatrix;
+			transform.computeRotationScaling(&rotationMatrix, &scaleMatrix);
+
+			const Eigen::Vector3f translation{ transform.translation() };
+			const Eigen::Quaternionf rotation{ rotationMatrix };
+			const Eigen::Vector3f scale{ scale(0, 0), scale(1, 1), scale(2, 2) };
+			
+			return { translation, rotation, scale };
+		}
+	}
 
 	void from_json(nlohmann::json const& json, Node& value)
 	{
-		replace_default_if_exists(json, "matrix", value.matrix);
-		get_to_if_exists(json, "mesh", value.mesh_index);
-		replace_default_if_exists(json, "rotation", value.rotation);
-		replace_default_if_exists(json, "scale", value.scale);
-		replace_default_if_exists(json, "translation", value.translation);
+		nlohmann::json::const_iterator const matrixLocation = json.find("matrix");
+
+		if (matrixLocation != json.end())
+		{
+			assert(json.find("rotation") == json.end());
+			assert(json.find("scale") == json.end());
+			assert(json.find("translation") == json.end());
+
+			const Eigen::Matrix4f matrix = matrixLocation->get<Eigen::Matrix4f>();
+			
+			const Transform transform = decompose(matrix);
+			value.translation = transform.translation;
+			value.rotation = transform.rotation;
+			value.scale = transform.scale;
+		}
+		else
+		{
+			replace_default_if_exists(json, "rotation", value.rotation);
+			replace_default_if_exists(json, "scale", value.scale);
+			replace_default_if_exists(json, "translation", value.translation);
+		}
+
+		get_to_if_exists(json, "mesh", value.mesh_index);		
 		get_to_if_exists(json, "name", value.name);
 	}
 
