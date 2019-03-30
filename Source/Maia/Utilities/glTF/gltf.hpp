@@ -5,6 +5,7 @@
 #include <optional>
 #include <string>
 #include <unordered_map>
+#include <variant>
 #include <vector>
 
 #include <Eigen/Geometry>
@@ -118,13 +119,47 @@ namespace Maia::Utilities::glTF
 	void to_json(nlohmann::json& json, Mesh const& value);
 
 
+	struct Camera
+	{
+		enum class Type
+		{
+			Orthographic,
+			Perspective
+		};
+
+		struct Orthographic
+		{
+			float horizontal_magnification;
+			float vertical_magnification;
+			float near_z;
+			float far_z;
+		};
+
+		struct Perspective
+		{
+			std::optional<float> aspect_ratio;
+			float vertical_field_of_view;
+			float near_z;
+			std::optional<float> far_z;
+		};
+
+		Type type;
+		std::optional<std::string> name;
+		std::variant<Orthographic, Perspective> projection;
+	};
+
+
 	struct Node
 	{
+		std::optional<std::string> name;
+
 		std::optional<std::size_t> mesh_index;
+		std::optional<std::size_t> camera_index;
+		std::optional<std::vector<std::size_t>> child_indices;
+
 		Eigen::Quaternionf rotation{ Eigen::Quaternionf::Identity() };
 		Eigen::Vector3f scale{ Eigen::Vector3f::Ones() };
 		Eigen::Vector3f translation{ Eigen::Vector3f::Zero() };
-		std::optional<std::string> name;
 	};
 
 	void from_json(nlohmann::json const& json, Node& value);
@@ -146,6 +181,7 @@ namespace Maia::Utilities::glTF
 		std::optional<std::vector<Accessor>> accessors;
 		std::optional<std::vector<Buffer>> buffers;
 		std::optional<std::vector<Buffer_view>> buffer_views;
+		std::optional<std::vector<Camera>> cameras;
 		std::optional<std::vector<Material>> materials;
 		std::optional<std::vector<Mesh>> meshes;
 		std::optional<std::vector<Node>> nodes;

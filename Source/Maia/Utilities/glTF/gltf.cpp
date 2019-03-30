@@ -7,6 +7,7 @@ namespace nlohmann
 	{
 		static void to_json(json& j, Eigen::Vector3f const& value)
 		{
+			assert(false);
 		}
 
 		static void from_json(const json& j, Eigen::Vector3f& value)
@@ -23,6 +24,7 @@ namespace nlohmann
 	{
 		static void to_json(json& j, Eigen::Vector4f const& value)
 		{
+			assert(false);
 		}
 
 		static void from_json(const json& j, Eigen::Vector4f& value)
@@ -39,6 +41,7 @@ namespace nlohmann
 	{
 		static void to_json(json& j, Eigen::Quaternionf const& value)
 		{
+			assert(false);
 		}
 
 		static void from_json(const json& j, Eigen::Quaternionf& value)
@@ -55,6 +58,7 @@ namespace nlohmann
 	{
 		static void to_json(json& j, Eigen::Matrix4f const& value)
 		{
+			assert(false);
 		}
 
 		static void from_json(const json& j, Eigen::Matrix4f& value)
@@ -71,6 +75,7 @@ namespace nlohmann
 	{
 		static void to_json(json& j, Maia::Utilities::glTF::Accessor::Type const& value)
 		{
+			assert(false);
 		}
 
 		static void from_json(const json& j, Maia::Utilities::glTF::Accessor::Type& value)
@@ -78,7 +83,7 @@ namespace nlohmann
 			using namespace Maia::Utilities::glTF;
 
 			std::string string_value = j.get<std::string>();
-			
+
 			if (string_value == "SCALAR")
 				value = Accessor::Type::Scalar;
 			else if (string_value == "VEC2")
@@ -94,7 +99,30 @@ namespace nlohmann
 			else if (string_value == "MAT4")
 				value = Accessor::Type::Matrix4x4;
 			else
-				throw std::invalid_argument{"String value does not match any of the possible values"};
+				throw std::invalid_argument{ "String value does not match any of the possible values" };
+		}
+	};
+
+	template <>
+	struct adl_serializer<Maia::Utilities::glTF::Camera::Type>
+	{
+		static void to_json(json& j, Maia::Utilities::glTF::Camera::Type const& value)
+		{
+			assert(false);
+		}
+
+		static void from_json(const json& j, Maia::Utilities::glTF::Camera::Type& value)
+		{
+			using namespace Maia::Utilities::glTF;
+
+			std::string string_value = j.get<std::string>();
+
+			if (string_value == "perspective")
+				value = Camera::Type::Perspective;
+			else if (string_value == "orthographic")
+				value = Camera::Type::Orthographic;
+			else
+				throw std::invalid_argument{ "String value does not match any of the possible values" };
 		}
 	};
 }
@@ -129,10 +157,10 @@ namespace Maia::Utilities::glTF
 	{
 		switch (component_type)
 		{
-		case Component_type::Byte: 
+		case Component_type::Byte:
 		case Component_type::Unsigned_byte:
 			return 1;
-		case Component_type::Short: 
+		case Component_type::Short:
 		case Component_type::Unsigned_short:
 			return 2;
 		case Component_type::Unsigned_int:
@@ -142,7 +170,7 @@ namespace Maia::Utilities::glTF
 		}
 	}
 
-	
+
 	void from_json(nlohmann::json const& json, Accessor& value)
 	{
 		get_to_if_exists(json, "bufferView", value.buffer_view_index);
@@ -167,14 +195,14 @@ namespace Maia::Utilities::glTF
 		}
 	}
 
-	
+
 	void from_json(nlohmann::json const& json, Buffer& value)
 	{
 		get_to_if_exists(json, "uri", value.uri);
 		json.at("byteLength").get_to(value.byte_length);
 	}
 
-	
+
 	void from_json(nlohmann::json const& json, Buffer_view& value)
 	{
 		json.at("buffer").get_to(value.buffer_index);
@@ -182,7 +210,7 @@ namespace Maia::Utilities::glTF
 		json.at("byteLength").get_to(value.byte_length);
 	}
 
-	
+
 	void from_json(nlohmann::json const& json, PbrMetallicRoughness& value)
 	{
 		replace_default_if_exists(json, "baseColorFactor", value.base_color_factor);
@@ -216,7 +244,7 @@ namespace Maia::Utilities::glTF
 		json.at("primitives").get_to(value.primitives);
 	}
 
-	
+
 	namespace
 	{
 		struct Transform
@@ -229,7 +257,7 @@ namespace Maia::Utilities::glTF
 		Transform decompose(Eigen::Matrix4f const& matrix)
 		{
 			const Eigen::Affine3f transform{ matrix };
-			
+
 			Eigen::Matrix3f rotationMatrix;
 			Eigen::Matrix3f scaleMatrix;
 			transform.computeRotationScaling(&rotationMatrix, &scaleMatrix);
@@ -237,7 +265,7 @@ namespace Maia::Utilities::glTF
 			const Eigen::Vector3f translation{ transform.translation() };
 			const Eigen::Quaternionf rotation{ rotationMatrix };
 			const Eigen::Vector3f scale{ scale(0, 0), scale(1, 1), scale(2, 2) };
-			
+
 			return { translation, rotation, scale };
 		}
 	}
@@ -253,7 +281,7 @@ namespace Maia::Utilities::glTF
 			assert(json.find("translation") == json.end());
 
 			const Eigen::Matrix4f matrix = matrixLocation->get<Eigen::Matrix4f>();
-			
+
 			const Transform transform = decompose(matrix);
 			value.translation = transform.translation;
 			value.rotation = transform.rotation;
@@ -266,8 +294,51 @@ namespace Maia::Utilities::glTF
 			replace_default_if_exists(json, "translation", value.translation);
 		}
 
-		get_to_if_exists(json, "mesh", value.mesh_index);		
+		get_to_if_exists(json, "mesh", value.mesh_index);
+		get_to_if_exists(json, "camera", value.camera_index);
+		get_to_if_exists(json, "children", value.child_indices);
 		get_to_if_exists(json, "name", value.name);
+	}
+
+
+	void from_json(nlohmann::json const& json, Camera::Orthographic& value)
+	{
+		json.at("xmag").get_to(value.horizontal_magnification);
+		json.at("ymag").get_to(value.vertical_magnification);
+		json.at("znear").get_to(value.near_z);
+		json.at("zfar").get_to(value.far_z);
+	}
+
+	void from_json(nlohmann::json const& json, Camera::Perspective& value)
+	{
+		get_to_if_exists(json, "aspectRatio", value.aspect_ratio);
+		json.at("yfov").get_to(value.vertical_field_of_view);
+		json.at("znear").get_to(value.near_z);
+		get_to_if_exists(json, "zfar", value.far_z);
+	}
+
+	void from_json(nlohmann::json const& json, Camera& value)
+	{
+		json.at("type").get_to(value.type);
+		get_to_if_exists(json, "name", value.name);
+		
+		{
+			nlohmann::json::const_iterator const orthographic_location = json.find("orthographic");
+
+			if (orthographic_location != json.end())
+			{
+				value.projection = orthographic_location->get<Camera::Orthographic>();
+			}
+			else
+			{
+				nlohmann::json::const_iterator const perspective_location = json.find("perspective");
+
+				if (perspective_location == json.end())
+					throw std::invalid_argument{ "Either orthographic or perspective must be defined!" };
+
+				value.projection = perspective_location->get<Camera::Perspective>();
+			}
+		}
 	}
 
 
@@ -283,6 +354,7 @@ namespace Maia::Utilities::glTF
 		get_to_if_exists(json, "accessors", value.accessors);
 		get_to_if_exists(json, "buffers", value.buffers);
 		get_to_if_exists(json, "bufferViews", value.buffer_views);
+		get_to_if_exists(json, "cameras", value.cameras);
 		get_to_if_exists(json, "materials", value.materials);
 		get_to_if_exists(json, "meshes", value.meshes);
 		get_to_if_exists(json, "nodes", value.nodes);
