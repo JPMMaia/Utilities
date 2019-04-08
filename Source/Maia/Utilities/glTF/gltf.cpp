@@ -177,8 +177,12 @@ namespace Maia::Utilities::glTF
 		json.at("componentType").get_to(value.component_type);
 		json.at("count").get_to(value.count);
 		json.at("type").get_to(value.type);
-		get_to_if_exists(json, "max", value.max);
-		get_to_if_exists(json, "min", value.min);
+		
+		if (value.type == Accessor::Type::Vector3)
+		{
+			get_to_if_exists(json, "max", value.max);
+			get_to_if_exists(json, "min", value.min);
+		}
 	}
 	std::uint8_t size_of(Accessor::Type accessor_type)
 	{
